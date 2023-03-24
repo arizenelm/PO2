@@ -10,8 +10,12 @@ namespace PO2
     {
         //public enum TCtrlState {cStart = 0, cEditing, /*FunDone,*/ cValDone, cExpDone, cOpChange, cError }
 
-        public enum States { l_val = 0, op, r_val }
-        
+        public enum States { l_val = 0, op, r_val, func }
+
+        public bool floatMode;
+
+        private const string funcInv = "^(-1)";
+        private const string funcSqr = "^2";
         TEditor Editor { get; set; }
 
         TProc<T> Processor { get; set; }
@@ -22,7 +26,7 @@ namespace PO2
 
         T Number { get; set; }
 
-        public static char ConvertToOperator(int i)
+        private static char ConvertToOperator(int i)
         {
             switch (i)
             {
@@ -37,7 +41,11 @@ namespace PO2
                 default:
                     return '\0';
             }
+        }
 
+        private static bool isOperator(char ch)
+        {
+            return (ch == '-' || ch == '+' || ch == '*' || ch == '/');
         }
 
         public TCtrl()
@@ -47,7 +55,7 @@ namespace PO2
             Memory = new TMemory<T>();
             State = States.l_val;
             Number = new T();
-            
+            floatMode = false;
         }
 
         public string Command(int i)
@@ -73,15 +81,41 @@ namespace PO2
                 return Editor.String;
             }
 
-            // Ввод операнда
-            if (26 <= i && i <= 29)
+            // Backspace
+            if (i == 22)
             {
-                if (State == States.l_val || State == States.op)
+                States old_state = State;
+                if (old_state == States.func)
                 {
-                    char ch = ConvertToOperator(i);
-                    Editor.AddSign(ch);
-                    Processor.Operation = (TProc<T>.Operations)ch;
-                    State = States.op;
+                    if (Processor.Function == TProc<T>.Functions.Sqr)
+                        for (int j = 0; j < funcSqr.Length; j++) { Editor.Backspace(); }
+                    else
+                        for (int j = 0; j < funcInv.Length; j++) { Editor.Backspace(); }
+                    State = States.l_val;
+                    Processor.ResetFunc();
+                    return Editor.String;
+                }
+                Editor.Backspace();
+                
+                if (old_state == States.r_val)
+                {
+                    if (isOperator(Editor.String.Last()))
+                    {
+                        State = States.op;
+                        Processor.Rop = new T();
+                    }
+                }
+
+                return Editor.String;
+            }
+
+            // Смена знака
+            if (i == 23)
+            {
+                if (State == States.l_val)
+                {
+                    Processor.Lop_Res.Num = -Processor.Lop_Res.Num;
+                    Editor.String = Processor.Lop_Res.Value;
                 }
                 return Editor.String;
             }
@@ -91,20 +125,17 @@ namespace PO2
             {
                 try
                 {
-                    if (State == States.r_val)
-                    {
-                        Processor.ExecOperation();
-                        Editor.String = Processor.Lop_Res.Value;
-                    }
-                    else if (State == States.op)
+                    if (State == States.op)
                     {
                         Processor.Rop = Processor.Lop_Res;
                         Processor.ExecOperation();
                     }
-                    else
+                    else if (State == States.func)
                     {
-                        Processor.ExecOperation();
+                        Processor.ExecFunction();
                     }
+                    else
+                        Processor.ExecOperation();
                     Editor.String = Processor.Lop_Res.Value;
                     State = States.l_val;
                     return Editor.String;
@@ -118,16 +149,45 @@ namespace PO2
                 }
             }
 
-            // Смена знака
-            if (i == 23)
+
+            // Ввод оператора
+            if (26 <= i && i <= 29)
             {
-                if (State == States.l_val)
+                if (State == States.l_val || State == States.op)
                 {
-                    Processor.Lop_Res.Num = -Processor.Lop_Res.Num;
-                    Editor.String = Processor.Lop_Res.Value;
+                    char ch = ConvertToOperator(i);
+                    Editor.AddSign(ch);
+                    Processor.Operation = (TProc<T>.Operations)ch;
+                    State = States.op;
                 }
                 return Editor.String;
             }
+
+
+            // Возведение в квадрат
+            if (i == 30)
+            {
+                if (State == States.l_val)
+                {
+                    Processor.Function = TProc<T>.Functions.Sqr;
+                    Editor.Add(funcSqr);
+                    State = States.func;
+                }
+                return Editor.String;
+            }
+
+            // Инверсия числа
+            if (i == 31)
+            {
+                if (State == States.l_val)
+                {
+                    Processor.Function = TProc<T>.Functions.Inv;
+                    Editor.Add(funcInv);
+                    State = States.func;
+                }
+                return Editor.String;
+            }            
+
             return "";
         }
 

@@ -105,7 +105,7 @@ namespace PO2
             return new TPNumber(d1.num / d2.num, d1.p, d1.acc);
         }
 
-        public TPNumber Reverse()
+        public TPNumber Inverse()
         {
             if (num == 0)
                 throw new ArithmeticException("Ошибка: ноль необратим\n");

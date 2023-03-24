@@ -14,28 +14,30 @@ namespace PO2
 
         //public int P { get; set; }
 
-        public string String { get; set; }
+        private StringBuilder sb;
+        public string String 
+        { 
+            get { return sb.ToString(); } 
+            set { sb.Clear(); sb.Append(value); }
+        }
 
-        public bool isZero
+        public bool isZero()
         {
-            get 
-            {
-                if (String == Zero)
-                    return true;
-                else
-                    return false;
-            }
-            protected set { isZero = value; }
+            return String == Zero;
         }
 
         public void Add(char ch) 
         {
-            String.Append(ch);
+            sb.Append(ch);
+        }
+
+        public void Add(string str)
+        {
+            sb.Append(str);
         }
 
         public void AddSign(char sign) 
         {
-            StringBuilder sb = new StringBuilder(String);
             if (String.Last() != '+' && String.Last() != '-' && String.Last() != '/' && String.Last() != '*')
             {
                 sb.Append(sign);
@@ -44,30 +46,27 @@ namespace PO2
             {
                 sb[sb.Length - 1] = sign;
             }
-            String = sb.ToString();
         }
 
         public void AddDigitP(int a) 
         {
-            if (isZero)
+            if (isZero())
                 String = "";
             char ch = Converter.Conver_10_p.int_to_Char(a);
-            StringBuilder sb = new StringBuilder(String + ch);
-            String = sb.ToString();
-            //this.String.Append('@');
+            sb.Append(ch);
         }
 
         public void AddZero() 
         {
-            if (!isZero)
-                String += Zero;
+            if (!isZero())
+                sb.Append(Zero);
         }
 
         public void Backspace() 
         {
-            if (!isZero)
+            if (!isZero())
             {
-                String.Remove(String.Length - 1);
+                sb.Remove(String.Length - 1, 1);
                 if (String.Length == 0)
                     String = Zero;
             }
@@ -76,7 +75,7 @@ namespace PO2
         public void Clear() { String = Zero;  }
    
 
-        public TEditor() { String = Zero; }
+        public TEditor() { sb = new StringBuilder(Zero); }
 
         public void Edit() { }
 

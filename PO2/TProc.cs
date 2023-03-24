@@ -10,7 +10,7 @@ namespace PO2
     {
         public enum Operations { None = '\0', Add = '+', Sub = '-', Mul = '*', Dvd = '/' }
 
-        public enum Functions { Rev = 0, Sqr }
+        public enum Functions { None = 0, Inv, Sqr }
         
         public Operations Operation { get;  set; }
         public Functions Function { get;  set; }
@@ -24,12 +24,18 @@ namespace PO2
         {
             Lop_Res = new T();
             Rop = new T();
+            ResetFunc();
+            ResetOp();
+        }
+
+        public void ResetOp()
+        {
             Operation = Operations.None;
         }
 
-        public void Reset()
+        public void ResetFunc()
         {
-            Operation = Operations.None;
+            Function = Functions.None;
         }
 
         public void ExecOperation()
@@ -57,11 +63,11 @@ namespace PO2
         {
             switch(Function)
             {
-                case Functions.Rev:
-                    Rop = (T)(Rop.Reverse());
+                case Functions.Inv:
+                    Lop_Res = (T)(Lop_Res.Inverse());
                     break;
                 case Functions.Sqr:
-                    Rop = (T)(Rop.Sqare());
+                    Lop_Res = (T)(Lop_Res.Sqare());
                     break;
             }
         }

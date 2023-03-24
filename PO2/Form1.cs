@@ -187,7 +187,7 @@ namespace PO2
             richTextBox1.Text = CtrlTPN.Command(30);
         }
 
-        private void button_Click(object sender, EventArgs e)
+        private void buttonInverse_Click(object sender, EventArgs e)
         {
             richTextBox1.Text = CtrlTPN.Command(31);
         }

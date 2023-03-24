@@ -8,3 +8,14 @@ C:\Users\egorg\source\repos\PO2\PO2\obj\Debug\PO2.csproj.GenerateResource.cache
 C:\Users\egorg\source\repos\PO2\PO2\obj\Debug\PO2.csproj.CoreCompileInputs.cache
 C:\Users\egorg\source\repos\PO2\PO2\obj\Debug\PO2.exe
 C:\Users\egorg\source\repos\PO2\PO2\obj\Debug\PO2.pdb
+C:\Users\Egor\Source\Repos\PO2\PO2\bin\Debug\PO2.exe.config
+C:\Users\Egor\Source\Repos\PO2\PO2\bin\Debug\PO2.exe
+C:\Users\Egor\Source\Repos\PO2\PO2\bin\Debug\PO2.pdb
+C:\Users\Egor\Source\Repos\PO2\PO2\obj\Debug\PO2.csproj.AssemblyReference.cache
+C:\Users\Egor\Source\Repos\PO2\PO2\obj\Debug\PO2.csproj.SuggestedBindingRedirects.cache
+C:\Users\Egor\Source\Repos\PO2\PO2\obj\Debug\PO2.Form1.resources
+C:\Users\Egor\Source\Repos\PO2\PO2\obj\Debug\PO2.Properties.Resources.resources
+C:\Users\Egor\Source\Repos\PO2\PO2\obj\Debug\PO2.csproj.GenerateResource.cache
+C:\Users\Egor\Source\Repos\PO2\PO2\obj\Debug\PO2.csproj.CoreCompileInputs.cache
+C:\Users\Egor\Source\Repos\PO2\PO2\obj\Debug\PO2.exe
+C:\Users\Egor\Source\Repos\PO2\PO2\obj\Debug\PO2.pdb

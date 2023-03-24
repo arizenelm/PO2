@@ -330,7 +330,7 @@ namespace PO2
             this.button.TabIndex = 2;
             this.button.Text = "1/x";
             this.button.UseVisualStyleBackColor = true;
-            this.button.Click += new System.EventHandler(this.button_Click);
+            this.button.Click += new System.EventHandler(this.buttonInverse_Click);
             // 
             // button7
             // 
