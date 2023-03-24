@@ -10,7 +10,7 @@ namespace PO2
     {
         //public enum TCtrlState {cStart = 0, cEditing, /*FunDone,*/ cValDone, cExpDone, cOpChange, cError }
 
-        public enum States { l_val = 0, op, r_val, error }
+        public enum States { l_val = 0, op, r_val }
         
         TEditor Editor { get; set; }
 
@@ -111,9 +111,22 @@ namespace PO2
                 }
                 catch (Exception e)
                 {
-                    State = States.error;
+                    Editor.String = TEditor.Zero;
+                    Processor.Clear();
+                    State = States.l_val;
                     return e.Message;
                 }
+            }
+
+            // Смена знака
+            if (i == 23)
+            {
+                if (State == States.l_val)
+                {
+                    Processor.Lop_Res.Num = -Processor.Lop_Res.Num;
+                    Editor.String = Processor.Lop_Res.Value;
+                }
+                return Editor.String;
             }
             return "";
         }

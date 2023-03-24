@@ -101,14 +101,14 @@ namespace PO2
             if (d1.p != d2.p)
                 throw new BaseException("Different bases in operator/\n");
             if (d2.num == 0)
-                throw new ArithmeticException("TPNumber division by zero\n");
+                throw new ArithmeticException("Ошибка: деление на ноль\n");
             return new TPNumber(d1.num / d2.num, d1.p, d1.acc);
         }
 
         public TPNumber Reverse()
         {
             if (num == 0)
-                throw new ArithmeticException("TPNumber reversing zero\n");
+                throw new ArithmeticException("Ошибка: ноль необратим\n");
             return new TPNumber(1 / num, p, acc);
         }
 

@@ -41,9 +41,5 @@ namespace PO2
 
         public double GetNum() { return fNumber.Num; }
 
-
-
-
-
     }
 }

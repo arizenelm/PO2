@@ -10,7 +10,10 @@ namespace PO2
     {
         public static string Convert(double n, int p, int c, char delim)
         {
-            return Conver_10_p.Do(n, p, c, delim);
+            string res = Conver_10_p.Do(Math.Abs(n), p, c, delim);
+            if (n < 0)
+                res = "-" + res;
+            return res;
         }
 
         public static double Convert(string P_num, int p, char delim)
@@ -27,7 +30,7 @@ namespace PO2
                 string integer = int_to_P((int)n, p);
                 string fraction;
                 if (n - (int)n == 0)
-                    fraction = "";
+                    return integer;
                 else
                     fraction = flt_to_P(n - (int)n, p, c);
                 return integer + delim + fraction;
