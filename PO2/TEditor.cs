@@ -11,9 +11,6 @@ namespace PO2
         public const string Zero = "0";
         public const string Delim = ",";
 
-
-        //public int P { get; set; }
-
         private StringBuilder sb;
         public string Str 
         { 
