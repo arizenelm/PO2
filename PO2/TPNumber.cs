@@ -144,7 +144,7 @@ namespace PO2
 
         public void SetNumStr(string _Num)
         {
-            num = Convert.ToInt32(_Num);
+            num = Convert.ToDouble(_Num);
         }
     }
 }

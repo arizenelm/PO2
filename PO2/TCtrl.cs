@@ -8,8 +8,6 @@ namespace PO2
 {
     public class TCtrl<T> where T : TPNumber, new()
     {
-        //public enum TCtrlState {cStart = 0, cEditing, /*FunDone,*/ cValDone, cExpDone, cOpChange, cError }
-
         public enum States { l_val = 0, op, r_val, func }
 
         public bool floatMode;
@@ -43,7 +41,7 @@ namespace PO2
             }
         }
 
-        private static bool isOperator(char ch)
+        private static bool IsOperator(char ch)
         {
             return (ch == '-' || ch == '+' || ch == '*' || ch == '/');
         }
@@ -69,16 +67,16 @@ namespace PO2
                     Editor.AddDigitP(i);
 
                 if (State == States.l_val)
-                    Processor.Lop_Res.SetNumStr(Editor.String);
+                    Processor.Lop_Res.SetNumStr(Editor.Str);
             
                 else
                 {
-                    int start = Editor.String.IndexOf((char)Processor.Operation);
-                    string tmp = Editor.String.Substring(start + 1);
+                    int start = Editor.Str.IndexOf((char)Processor.Operation);
+                    string tmp = Editor.Str.Substring(start + 1);
                     Processor.Rop.SetNumStr(tmp);
                     State = States.r_val;
                 }
-                return Editor.String;
+                return Editor.Str;
             }
 
             // Backspace
@@ -93,20 +91,20 @@ namespace PO2
                         for (int j = 0; j < funcInv.Length; j++) { Editor.Backspace(); }
                     State = States.l_val;
                     Processor.ResetFunc();
-                    return Editor.String;
+                    return Editor.Str;
                 }
                 Editor.Backspace();
                 
                 if (old_state == States.r_val)
                 {
-                    if (isOperator(Editor.String.Last()))
+                    if (IsOperator(Editor.Str.Last()))
                     {
                         State = States.op;
                         Processor.Rop = new T();
                     }
                 }
 
-                return Editor.String;
+                return Editor.Str;
             }
 
             // Смена знака
@@ -115,12 +113,25 @@ namespace PO2
                 if (State == States.l_val)
                 {
                     Processor.Lop_Res.Num = -Processor.Lop_Res.Num;
-                    Editor.String = Processor.Lop_Res.Value;
+                    Editor.Str = Processor.Lop_Res.Value;
                 }
-                return Editor.String;
+                return Editor.Str;
+            }
+
+            // Ввод запятой
+            if (i == 24)
+            {
+                if (!floatMode)
+                    return Editor.Str;
+                if (State == States.l_val || State == States.r_val)
+                    Editor.AddComma();
+                return Editor.Str;
             }
 
             // Ввод знака равенства
+            // Отрицательное минус число не работает
+            // Обработать переполнение
+            // В каких то ситуация перестают вводиться функции
             if (i == 25)
             {
                 try
@@ -129,20 +140,28 @@ namespace PO2
                     {
                         Processor.Rop = Processor.Lop_Res;
                         Processor.ExecOperation();
+                        Processor.ResetFunc();
                     }
                     else if (State == States.func)
                     {
                         Processor.ExecFunction();
+                        Processor.ResetOp();
                     }
                     else
+                    {
+                        // Сделать просто Exec() ?
                         Processor.ExecOperation();
-                    Editor.String = Processor.Lop_Res.Value;
+                        Processor.ExecFunction();
+                    }
+                    if (!floatMode)
+                        Processor.Lop_Res.Num = (int)Processor.Lop_Res.Num;
+                    Editor.Str = Processor.Lop_Res.Value;
                     State = States.l_val;
-                    return Editor.String;
+                    return Editor.Str;
                 }
                 catch (Exception e)
                 {
-                    Editor.String = TEditor.Zero;
+                    Editor.Str = TEditor.Zero;
                     Processor.Clear();
                     State = States.l_val;
                     return e.Message;
@@ -160,7 +179,7 @@ namespace PO2
                     Processor.Operation = (TProc<T>.Operations)ch;
                     State = States.op;
                 }
-                return Editor.String;
+                return Editor.Str;
             }
 
 
@@ -173,7 +192,7 @@ namespace PO2
                     Editor.Add(funcSqr);
                     State = States.func;
                 }
-                return Editor.String;
+                return Editor.Str;
             }
 
             // Инверсия числа
@@ -185,7 +204,7 @@ namespace PO2
                     Editor.Add(funcInv);
                     State = States.func;
                 }
-                return Editor.String;
+                return Editor.Str;
             }            
 
             return "";

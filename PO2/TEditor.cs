@@ -15,7 +15,7 @@ namespace PO2
         //public int P { get; set; }
 
         private StringBuilder sb;
-        public string String 
+        public string Str 
         { 
             get { return sb.ToString(); } 
             set { sb.Clear(); sb.Append(value); }
@@ -23,7 +23,7 @@ namespace PO2
 
         public bool isZero()
         {
-            return String == Zero;
+            return Str == Zero;
         }
 
         public void Add(char ch) 
@@ -36,9 +36,14 @@ namespace PO2
             sb.Append(str);
         }
 
+        public void AddComma()
+        {
+            if (Str.Substring(Str.Length - 1) != Delim)
+                Add(Delim);
+        }
         public void AddSign(char sign) 
         {
-            if (String.Last() != '+' && String.Last() != '-' && String.Last() != '/' && String.Last() != '*')
+            if (Str.Last() != '+' && Str.Last() != '-' && Str.Last() != '/' && Str.Last() != '*')
             {
                 sb.Append(sign);
             }
@@ -51,7 +56,7 @@ namespace PO2
         public void AddDigitP(int a) 
         {
             if (isZero())
-                String = "";
+                Str = "";
             char ch = Converter.Conver_10_p.int_to_Char(a);
             sb.Append(ch);
         }
@@ -66,13 +71,13 @@ namespace PO2
         {
             if (!isZero())
             {
-                sb.Remove(String.Length - 1, 1);
-                if (String.Length == 0)
-                    String = Zero;
+                sb.Remove(Str.Length - 1, 1);
+                if (Str.Length == 0)
+                    Str = Zero;
             }
         }
 
-        public void Clear() { String = Zero;  }
+        public void Clear() { Str = Zero;  }
    
 
         public TEditor() { sb = new StringBuilder(Zero); }
