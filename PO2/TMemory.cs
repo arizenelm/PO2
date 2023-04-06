@@ -19,24 +19,27 @@ namespace PO2
             }
             set
             {
-                FNumber = Activator.CreateInstance(typeof(T), new object[] { value }) as T;
+                //FNumber = Activator.CreateInstance(typeof(T), new object[] { value }) as T;
+                fNumber = value;
                 FState = true;
             }
         }
 
-        public bool FState { get; protected set; }
+        public bool FState { get; set; }
 
         public void Add(T E)
         {
+            if (!FState)
+                FState = true;
             fNumber = (T)(fNumber + E);
         }
 
         public void Clear()
         {
             fNumber = new T();
-            FState = false;
         }
-        
+
+
         public string GetStr() { return fNumber.Value;  }
 
         public double GetNum() { return fNumber.Num; }

@@ -18,7 +18,7 @@ namespace PO2
 
         TProc<T> Processor { get; set; }
 
-        TMemory<T> Memory { get; set; }
+        public TMemory<T> Memory { get; set; }
 
         States State { get; set; }
 
@@ -71,11 +71,69 @@ namespace PO2
             
                 else
                 {
-                    int start = Editor.Str.IndexOf((char)Processor.Operation);
+                    int start = Editor.Str.IndexOf((char)Processor.Operation, 1);
                     string tmp = Editor.Str.Substring(start + 1);
                     Processor.Rop.SetNumStr(tmp);
                     State = States.r_val;
                 }
+                return Editor.Str;
+            }
+
+            // Добавить в память
+            if (i == 16)
+            {
+                if (Memory.FState)
+                {
+                    if (State == States.l_val)
+                        Memory.Add(Processor.Lop_Res);
+                }
+                return Editor.Str;
+            }
+
+            // Сохранить в память
+            if (i == 17)
+            {
+                if (Memory.FState)
+                {
+                    if (State == States.l_val)
+                        Memory.FNumber = Processor.Lop_Res;
+                }
+                return Editor.Str;
+            }
+
+            // Взять из памяти
+            if (i == 18)
+            {
+                if (Memory.FState)
+                {
+                    if (State == States.l_val)
+                    {
+                        Editor.Str = Memory.GetStr();
+                        Processor.Lop_Res = Memory.FNumber;
+                    }
+                    else if (State == States.op)
+                    {
+                        Editor.Str += Memory.GetStr();
+                        Processor.Rop.Num = Memory.GetNum();
+                    }                 
+                }
+                return Editor.Str;
+            }
+
+            // Очистить память
+            if (i == 19)
+            {
+                Memory.Clear();
+                return Editor.Str;
+            }
+
+
+            //CE
+            if (i == 21)
+            {
+                State = States.l_val;
+                Processor.Clear();
+                Editor.Clear();
                 return Editor.Str;
             }
 
@@ -93,8 +151,8 @@ namespace PO2
                     Processor.ResetFunc();
                     return Editor.Str;
                 }
+
                 Editor.Backspace();
-                
                 if (old_state == States.r_val)
                 {
                     if (IsOperator(Editor.Str.Last()))
@@ -103,6 +161,10 @@ namespace PO2
                         Processor.Rop = new T();
                     }
                 }
+                else if (old_state == States.op)
+                    Processor.ResetOp();
+                else
+                    Processor.Clear();
 
                 return Editor.Str;
             }
@@ -110,11 +172,9 @@ namespace PO2
             // Смена знака
             if (i == 23)
             {
-                if (State == States.l_val)
-                {
-                    Processor.Lop_Res.Num = -Processor.Lop_Res.Num;
-                    Editor.Str = Processor.Lop_Res.Value;
-                }
+                Processor.Lop_Res.Num = -Processor.Lop_Res.Num;
+                Editor.AddMinusFront();
+                
                 return Editor.Str;
             }
 
@@ -129,9 +189,6 @@ namespace PO2
             }
 
             // Ввод знака равенства
-            // Отрицательное минус число не работает
-            // Обработать переполнение
-            // В каких то ситуация перестают вводиться функции
             if (i == 25)
             {
                 try
@@ -145,11 +202,10 @@ namespace PO2
                     else if (State == States.func)
                     {
                         Processor.ExecFunction();
-                        Processor.ResetOp();
+                        Processor.ResetOp();                    
                     }
                     else
                     {
-                        // Сделать просто Exec() ?
                         Processor.ExecOperation();
                         Processor.ExecFunction();
                     }
@@ -177,6 +233,7 @@ namespace PO2
                     char ch = ConvertToOperator(i);
                     Editor.AddSign(ch);
                     Processor.Operation = (TProc<T>.Operations)ch;
+                    Processor.ResetFunc();
                     State = States.op;
                 }
                 return Editor.Str;
@@ -189,6 +246,7 @@ namespace PO2
                 if (State == States.l_val)
                 {
                     Processor.Function = TProc<T>.Functions.Sqr;
+                    Processor.ResetOp();
                     Editor.Add(funcSqr);
                     State = States.func;
                 }
@@ -201,11 +259,77 @@ namespace PO2
                 if (State == States.l_val)
                 {
                     Processor.Function = TProc<T>.Functions.Inv;
+                    Processor.ResetOp(); // Сделать, чтобы установление режима функции автоматически убирало режим операции
                     Editor.Add(funcInv);
                     State = States.func;
                 }
                 return Editor.Str;
             }            
+
+            if (32 <= i && i <= 46)
+            {
+                int new_p = i - 30;
+                Processor.Lop_Res.P = new_p;
+                Processor.Rop.P = new_p;
+                Editor.Str = Processor.Lop_Res.Value;
+                if (State != States.l_val)
+                {
+                    Editor.Str += (char)Processor.Operation;
+                    if (State == States.r_val)
+                        Editor.Str += Processor.Rop.Value;
+                }        
+                return Editor.Str;
+            }
+
+            // Режим целых
+            if (i == 47)
+            {
+                floatMode = false;
+                if (State == States.l_val)
+                {
+                    Processor.Lop_Res.Num = (int)Processor.Lop_Res.Num;
+                    Editor.Str = Processor.Lop_Res.Value;
+                }                
+                return Editor.Str;
+            }
+
+            // Режим дробных
+            if (i == 48)
+            {
+                floatMode = true;
+                return Editor.Str;
+            }
+
+            // Изменение точности
+            if (49 <= i && i <= 56)
+            {
+                int new_acc = i - 47;
+                Processor.Lop_Res.Acc = new_acc;
+                Processor.Rop.Acc = new_acc;
+                Editor.Str = Processor.Lop_Res.Value;
+                if (State != States.l_val)
+                {
+                    Editor.Str += (char)Processor.Operation;
+                    if (State == States.r_val)
+                        Editor.Str += Processor.Rop.Value;
+                }
+                return Editor.Str;
+            }
+
+            // Выключить память
+            if (i == 57)
+            {
+                Memory.Clear();
+                Memory.FState = false;
+                return Editor.Str;
+            }
+
+            // Включить память
+            if (i == 58)
+            {
+                Memory.FState = true;
+                return Editor.Str;
+            }
 
             return "";
         }

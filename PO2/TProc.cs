@@ -11,7 +11,6 @@ namespace PO2
         public enum Operations { None = '\0', Add = '+', Sub = '-', Mul = '*', Dvd = '/' }
 
         public enum Functions { None = 0, Inv, Sqr }
-        
         public Operations Operation { get;  set; }
         public Functions Function { get;  set; }
 
@@ -36,6 +35,12 @@ namespace PO2
         public void ResetFunc()
         {
             Function = Functions.None;
+        }
+
+        public void Reset()
+        {
+            ResetOp();
+            ResetFunc();
         }
 
         public void ExecOperation()

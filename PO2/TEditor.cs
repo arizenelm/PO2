@@ -50,11 +50,19 @@ namespace PO2
             }
         }
 
+        public void AddMinusFront()
+        {
+            if (sb[0] != '-')
+                Str = "-" + Str;
+            else
+                Str = Str.Substring(1);
+        }
+
         public void AddDigitP(int a) 
         {
             if (isZero())
                 Str = "";
-            char ch = Converter.Conver_10_p.int_to_Char(a);
+            char ch = Converter.Conver_10_p.long_to_Char(a);
             sb.Append(ch);
         }
 

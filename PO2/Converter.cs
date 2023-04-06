@@ -27,16 +27,16 @@ namespace PO2
             {
                 if (n == 0)
                     return "0";
-                string integer = int_to_P((int)n, p);
+                string integer = long_to_P((long)n, p);
                 string fraction;
                 if (n - (int)n == 0)
                     return integer;
                 else
-                    fraction = flt_to_P(n - (int)n, p, c);
+                    fraction = flt_to_P(n - (long)n, p, c);
                 return integer + delim + fraction;
             }
 
-            public static char int_to_Char(int d)
+            public static char long_to_Char(long d)
             {
                 if (d < 10)
                     return (char)('0' + d);
@@ -44,13 +44,13 @@ namespace PO2
                     return (char)(d - 10 + 'A');
             }
 
-            private static string int_to_P(int n, int p)
+            private static string long_to_P(long n, int p)
             {
                 StringBuilder result = new StringBuilder("");
                 StringBuilder tmp = new StringBuilder("");
                 do
                 {
-                    tmp.Append(int_to_Char(n % p));
+                    tmp.Append(long_to_Char(n % p));
                     n /= p;
                 } while (n > 0);
                 result = new StringBuilder(new string('@', tmp.Length));
@@ -68,7 +68,7 @@ namespace PO2
                     int temp = (int)(d / delim);
                     if (temp >= 1)
                         d -= delim * temp;
-                    result.Append(int_to_Char(temp));
+                    result.Append(long_to_Char(temp));
                     if (Math.Abs(d) < 1 / Math.Pow(p, c))
                         break;
                     delim /= p;
@@ -105,7 +105,7 @@ namespace PO2
             }
 
             //Возвращает десятичное значение цифры в какой-либо другой системе счисления.
-            static public int char_To_num(char ch)
+            static public long char_To_num(char ch)
             {
                 if (ch >= '0' && ch <= '9')
                     return ch - '0';

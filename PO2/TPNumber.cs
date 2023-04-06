@@ -34,11 +34,12 @@ namespace PO2
         public int P
         {
             get { return p; }
-            protected set
+            set
             {
                 if (value < 2 || value > 16)
                     throw new BaseException("P must be in [2; 16]\n");
-                P = value;
+                p = value;
+                Reconvert();
             }
         }
 
@@ -86,7 +87,13 @@ namespace PO2
         {
             if (d1.p != d2.p)
                 throw new BaseException("Different bases in operator*\n");
-            return new TPNumber(d1.num * d2.num, d1.p, d1.acc);
+            double res;
+            try
+            {
+                checked { res = d1.num * d2.num; }
+            }
+            catch (Exception e) { Console.WriteLine("Overflow!");  throw e; }
+            return new TPNumber(res, d1.p, d1.acc);
         }
 
         public static TPNumber operator-(TPNumber d1, TPNumber d2)
@@ -142,9 +149,10 @@ namespace PO2
             p = Convert.ToInt32(_P);
         }
 
-        public void SetNumStr(string _Num)
+        public void SetNumStr(string _Num, char delim = ',')
         {
-            num = Convert.ToDouble(_Num);
+            num = Converter.Convert(_Num, p, delim);
+            Reconvert();
         }
     }
 }
