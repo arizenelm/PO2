@@ -115,6 +115,7 @@ namespace PO2
                     {
                         Editor.Str += Memory.GetStr();
                         Processor.Rop.Num = Memory.GetNum();
+                        State = States.r_val;
                     }                 
                 }
                 return Editor.Str;
