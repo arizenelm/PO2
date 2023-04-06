@@ -97,6 +97,26 @@ namespace PO2
                 case Keys.D9:
                     button9.PerformClick();
                     break;
+
+                case Keys.A:
+                    button10.PerformClick();
+                    break;
+                case Keys.B:
+                    button11.PerformClick();
+                    break;
+                case Keys.C:
+                    button12.PerformClick();
+                    break;
+                case Keys.D:
+                    button13.PerformClick();
+                    break;
+                case Keys.E:
+                    button14.PerformClick();
+                    break;
+                case Keys.F:
+                    button15.PerformClick();
+                    break;
+
                 case Keys.OemMinus:
                     buttonMin.PerformClick();
                     break;
