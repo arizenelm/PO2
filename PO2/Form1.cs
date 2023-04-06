@@ -52,6 +52,7 @@ namespace PO2
             for (int i = 1; i < 16; i++)
                 Buttons[i].Enabled = i < n ? true : false;
             richTextBox1.Text = CtrlTPN.Command(30 + n);
+            MemoryValue.Text = CtrlTPN.Memory.GetStr();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -347,6 +348,7 @@ namespace PO2
             label1.Focus();
             int n = Convert.ToInt32(domainUpDown2.SelectedItem.ToString());
             richTextBox1.Text = CtrlTPN.Command(47 + n);
+            MemoryValue.Text = CtrlTPN.Memory.GetStr();
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)

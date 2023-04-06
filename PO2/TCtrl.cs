@@ -266,6 +266,7 @@ namespace PO2
                 return Editor.Str;
             }            
 
+            // Изменение основания системы счисления
             if (32 <= i && i <= 46)
             {
                 int new_p = i - 30;
@@ -277,7 +278,11 @@ namespace PO2
                     Editor.Str += (char)Processor.Operation;
                     if (State == States.r_val)
                         Editor.Str += Processor.Rop.Value;
-                }        
+                }
+                if (Memory.FState)
+                {
+                    Memory.FNumber.P = new_p;
+                }
                 return Editor.Str;
             }
 
@@ -312,6 +317,10 @@ namespace PO2
                     Editor.Str += (char)Processor.Operation;
                     if (State == States.r_val)
                         Editor.Str += Processor.Rop.Value;
+                }
+                if (Memory.FState)
+                {
+                    Memory.FNumber.Acc = new_acc;
                 }
                 return Editor.Str;
             }
