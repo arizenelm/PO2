@@ -60,8 +60,6 @@ namespace PO2
             this.buttonSqr = new System.Windows.Forms.Button();
             this.buttonCE = new System.Windows.Forms.Button();
             this.buttonC = new System.Windows.Forms.Button();
-            this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.видToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.domainUpDown1 = new System.Windows.Forms.DomainUpDown();
@@ -465,34 +463,21 @@ namespace PO2
             this.buttonC.UseVisualStyleBackColor = true;
             this.buttonC.Click += new System.EventHandler(this.buttonC_Click);
             // 
-            // правкаToolStripMenuItem
-            // 
-            this.правкаToolStripMenuItem.Name = "правкаToolStripMenuItem";
-            this.правкаToolStripMenuItem.Size = new System.Drawing.Size(74, 24);
-            this.правкаToolStripMenuItem.Text = "Правка";
-            // 
-            // видToolStripMenuItem
-            // 
-            this.видToolStripMenuItem.Name = "видToolStripMenuItem";
-            this.видToolStripMenuItem.Size = new System.Drawing.Size(49, 24);
-            this.видToolStripMenuItem.Text = "Вид";
-            // 
             // справкаToolStripMenuItem
             // 
             this.справкаToolStripMenuItem.Name = "справкаToolStripMenuItem";
-            this.справкаToolStripMenuItem.Size = new System.Drawing.Size(81, 24);
+            this.справкаToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.справкаToolStripMenuItem.Text = "Справка";
+            this.справкаToolStripMenuItem.Click += new System.EventHandler(this.справкаToolStripMenuItem_Click);
             // 
             // menuStrip1
             // 
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.правкаToolStripMenuItem,
-            this.видToolStripMenuItem,
             this.справкаToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(654, 38);
+            this.menuStrip1.Size = new System.Drawing.Size(523, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -534,12 +519,12 @@ namespace PO2
             this.label1.Text = "Основание";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
-            // button__
+            // MemoryValue
             // 
             this.MemoryValue.Enabled = false;
             this.MemoryValue.Location = new System.Drawing.Point(17, 144);
             this.MemoryValue.Margin = new System.Windows.Forms.Padding(4);
-            this.MemoryValue.Name = "button__";
+            this.MemoryValue.Name = "MemoryValue";
             this.MemoryValue.Size = new System.Drawing.Size(73, 58);
             this.MemoryValue.TabIndex = 2;
             this.MemoryValue.Text = "0";
@@ -559,7 +544,7 @@ namespace PO2
             this.checkBox3.AutoSize = true;
             this.checkBox3.Location = new System.Drawing.Point(264, 543);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(77, 20);
+            this.checkBox3.Size = new System.Drawing.Size(74, 20);
             this.checkBox3.TabIndex = 7;
             this.checkBox3.Text = "Память";
             this.checkBox3.UseVisualStyleBackColor = true;
@@ -585,7 +570,7 @@ namespace PO2
             this.label2.Location = new System.Drawing.Point(10, 580);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(86, 20);
+            this.label2.Size = new System.Drawing.Size(69, 16);
             this.label2.TabIndex = 9;
             this.label2.Text = "Точность";
             // 
@@ -699,8 +684,6 @@ namespace PO2
         private System.Windows.Forms.Button buttonSqr;
         private System.Windows.Forms.Button buttonCE;
         private System.Windows.Forms.Button buttonC;
-        private System.Windows.Forms.ToolStripMenuItem правкаToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem видToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem справкаToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.DomainUpDown domainUpDown1;
