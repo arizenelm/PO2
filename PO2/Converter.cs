@@ -161,6 +161,12 @@ namespace PO2
             {
                 int pos = P_num.IndexOf(delim);
                 double weight;
+                int sign = 1;
+                if (P_num[0] == '-')
+                {
+                    sign = -1;
+                    P_num = P_num.Remove(0, 1);
+                }
                 if (pos == -1)
                     weight = Math.Pow(P, P_num.Length - 1);
                 else
@@ -168,7 +174,7 @@ namespace PO2
                     P_num = P_num.Remove(pos, 1);
                     weight = Math.Pow(P, pos - 1);
                 }
-                return Convert(P_num, P, weight);
+                return sign * Convert(P_num, P, weight);
             }
 
 
