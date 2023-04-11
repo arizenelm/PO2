@@ -6,51 +6,111 @@ using System.Threading.Tasks;
 
 namespace PO2
 {
-    class Converter
+    /// <summary>
+    /// Конвертирует строковое представление p-ичного 
+    /// в десятичное число и наоборот
+    /// </summary>
+    static class Converter
     {
+        /// <summary>
+        /// Перевод десятичного числа в p-ичное в строковом представлении
+        /// </summary>
+        /// <param name="n">Десятичное число</param>
+        /// <param name="p">Основание системы счисления результата</param>
+        /// <param name="c">Точность дробной части</param>
+        /// <param name="delim">Символ разделителя</param>
+        /// <returns></returns>
         public static string Convert(double n, int p, int c, char delim)
         {
-            string res = Conver_10_p.Do(Math.Abs(n), p, c, delim);
+            string res = ConverP10.Do(Math.Abs(n), p, c, delim);
             if (n < 0)
                 res = "-" + res;
             return res;
         }
 
+        /// <summary>
+        /// Перевод p-ичного числа в строковом представлении в десятичное
+        /// </summary>
+        /// <param name="P_num">Строковое представление p-ичного числа</param>
+        /// <param name="p">Основание системы счисления p-ичного числа</param>
+        /// <param name="delim">Символ разделителя</param>
+        /// <returns></returns>
         public static double Convert(string P_num, int p, char delim)
         {
-            return Conver_p_10.dval(P_num, p, delim);
+            return Conver10P.Dval(P_num, p, delim);
         }
 
-        public class Conver_10_p
+        /// <summary>
+        /// Возвращает десятичное значение цифры в p-ичной системе счисления
+        /// </summary>
+        /// <param name="ch">Символ цифры в p-ичной системе счисления</param>
+        /// <returns></returns>
+        static public long CharToNum(char ch)
         {
+            if (ch >= '0' && ch <= '9')
+                return ch - '0';
+            if (ch >= 'A' && ch <= 'F')
+                return ch - 'A' + 10;
+            return 0;
+        }
+
+        /// <summary>
+        /// Конвертирует цифру в виде числа в цифру в виде символа
+        /// </summary>
+        /// <param name="d">Числовое представление цифры</param>
+        /// <returns></returns>
+        public static char longToChar(long d)
+        {
+            if (d < 10)
+                return (char)('0' + d);
+            else
+                return (char)(d - 10 + 'A');
+        }
+
+        /// <summary>
+        /// Конвертер десятичного в p-ичное
+        /// </summary>
+        private static class ConverP10
+        {
+            /// <summary>
+            /// Выделяет из числа целую и дробную часть,
+            /// затем конвертирует в p-ичное
+            /// </summary>
+            /// <param name="n"></param>
+            /// <param name="p"></param>
+            /// <param name="c"></param>
+            /// <param name="delim"></param>
+            /// <returns></returns>
             public static string Do(double n, int p, int c, char delim)
             {
                 if (n == 0)
                     return "0";
-                string integer = long_to_P((long)n, p);
+                // Выделение целой части
+                string integer = longToP((long)n, p);
+                // Выделение дробной части
                 string fraction;
                 if (n - (int)n == 0)
                     return integer;
                 else
-                    fraction = flt_to_P(n - (long)n, p, c);
+                    fraction = fltToP(n - (long)n, p, c);
                 return integer + delim + fraction;
             }
 
-            public static char long_to_Char(long d)
-            {
-                if (d < 10)
-                    return (char)('0' + d);
-                else
-                    return (char)(d - 10 + 'A');
-            }
 
-            private static string long_to_P(long n, int p)
+
+            /// <summary>
+            /// Конвертирует целое в p-ичное
+            /// </summary>
+            /// <param name="n">Конвертируемое число</param>
+            /// <param name="p">Основание системы счисления</param>
+            /// <returns></returns>
+            private static string longToP(long n, int p)
             {
                 StringBuilder result = new StringBuilder("");
                 StringBuilder tmp = new StringBuilder("");
                 do
                 {
-                    tmp.Append(long_to_Char(n % p));
+                    tmp.Append(longToChar(n % p));
                     n /= p;
                 } while (n > 0);
                 result = new StringBuilder(new string('@', tmp.Length));
@@ -59,7 +119,14 @@ namespace PO2
                 return result.ToString();
             }
 
-            private static string flt_to_P(double d, int p, int c)
+            /// <summary>
+            /// Конвертирует дробную часть числа (< 1) в p-ичную дробь
+            /// </summary>
+            /// <param name="d">Конвертируемая дробь</param>
+            /// <param name="p">Основание системы счисления</param>
+            /// <param name="c">Точность</param>
+            /// <returns></returns>
+            private static string fltToP(double d, int p, int c)
             {
                 StringBuilder result = new StringBuilder();
                 double delim = 1.0 / p;
@@ -68,7 +135,7 @@ namespace PO2
                     int temp = (int)(d / delim);
                     if (temp >= 1)
                         d -= delim * temp;
-                    result.Append(long_to_Char(temp));
+                    result.Append(longToChar(temp));
                     if (Math.Abs(d) < 1 / Math.Pow(p, c))
                         break;
                     delim /= p;
@@ -77,9 +144,20 @@ namespace PO2
             }
         }
 
-        public class Conver_p_10
+        /// <summary>
+        /// Конвертер p-ичного числа в строковом представлении в десятичное
+        /// </summary>
+        private static class Conver10P
         {
-            public static double dval(string P_num, int P, char delim)
+            /// <summary>
+            /// Обрабатывает строку с p-ичным числом и конвертирует в
+            /// десятичное
+            /// </summary>
+            /// <param name="P_num">Строка с числом</param>
+            /// <param name="P">Основание системы счисления</param>
+            /// <param name="delim">Символ разделителя</param>
+            /// <returns></returns>
+            public static double Dval(string P_num, int P, char delim)
             {
                 int pos = P_num.IndexOf(delim);
                 double weight;
@@ -87,39 +165,27 @@ namespace PO2
                     weight = Math.Pow(P, P_num.Length - 1);
                 else
                 {              
-                    P_num.Remove(pos, 1);
-                    if (pos == 1)
-                    {
-                        if (P_num[0] == '0')
-                        {
-                            P_num.Remove(0, 1);
-                            weight = 1 / P;
-                        }
-                        else
-                            weight = 1;
-                    }
-                    else
-                        weight = Math.Pow(P, pos - 1);
+                    P_num = P_num.Remove(pos, 1);
+                    weight = Math.Pow(P, pos - 1);
                 }
-                return convert(P_num, P, weight);
+                return Convert(P_num, P, weight);
             }
 
-            //Возвращает десятичное значение цифры в какой-либо другой системе счисления.
-            static public long char_To_num(char ch)
-            {
-                if (ch >= '0' && ch <= '9')
-                    return ch - '0';
-                if (ch >= 'A' && ch <= 'F')
-                    return ch - 'A' + 10;
-                return 0;
-            }
 
-            private static double convert(string P_num, int P, double weight)
+
+            /// <summary>
+            /// Конверирует обработанную строку в десятичное число
+            /// </summary>
+            /// <param name="P_num">Обработанная строка</param>
+            /// <param name="P">Основание системы счисления</param>
+            /// <param name="weight">Максимальная степень десятки</param>
+            /// <returns></returns>
+            private static double Convert(string P_num, int P, double weight)
             {
                 double result = 0;
                 for (int i = 0; i < P_num.Length; i++)
                 {
-                    result += char_To_num(P_num[i]) * weight;
+                    result += CharToNum(P_num[i]) * weight;
                     weight /= P;
                 }
                 return result;

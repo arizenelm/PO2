@@ -69,6 +69,8 @@ namespace PO2
                 if (State == States.l_val)
                     Processor.Lop_Res.SetNumStr(Editor.Str);
             
+
+
                 else
                 {
                     int start = Editor.Str.IndexOf((char)Processor.Operation, 1);

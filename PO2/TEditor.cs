@@ -62,7 +62,7 @@ namespace PO2
         {
             if (isZero())
                 Str = "";
-            char ch = Converter.Conver_10_p.long_to_Char(a);
+            char ch = Converter.longToChar(a);
             sb.Append(ch);
         }
 
