@@ -20,7 +20,7 @@ namespace PO2
 
         public bool isZero()
         {
-            return Str == Zero;
+            return (Str == Zero || Str == "-" + Zero);
         }
 
         public void Add(char ch) 
@@ -61,7 +61,13 @@ namespace PO2
         public void AddDigitP(int a) 
         {
             if (isZero())
-                Str = "";
+            {
+                if (Str.Length == 1)
+                    Str = "";
+                else
+                    Str = "-";
+            }
+
             char ch = Converter.longToChar(a);
             sb.Append(ch);
         }
