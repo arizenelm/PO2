@@ -86,7 +86,7 @@ namespace PO2
                 if (n == 0)
                     return "0";
                 // Выделение целой части
-                string integer = longToP((long)n, p);
+                string integer = checked(longToP((long)n, p));
                 // Выделение дробной части
                 string fraction;
                 if (n - (int)n == 0)

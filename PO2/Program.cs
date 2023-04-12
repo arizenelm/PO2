@@ -6,6 +6,9 @@ using System.Windows.Forms;
 
 namespace PO2
 {
+    /// <summary>
+    /// Исключение разных оснований систем счисления
+    /// </summary>
     class BaseException : Exception
     {
         public BaseException(string msg) : base(msg) { }

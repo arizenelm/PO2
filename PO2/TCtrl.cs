@@ -213,7 +213,7 @@ namespace PO2
                         Processor.ExecFunction();
                     }
                     if (!floatMode)
-                        Processor.Lop_Res.Num = (int)Processor.Lop_Res.Num;
+                        Processor.Lop_Res.Num = checked((long)Processor.Lop_Res.Num);
                     Editor.Str = Processor.Lop_Res.Value;
                     State = States.l_val;
                     return Editor.Str;

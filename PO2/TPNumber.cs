@@ -10,118 +10,114 @@ namespace PO2
 
     public class TPNumber
     {
-        // Переконвертация value при изменении значения, системы счисления или точности
-        private void Reconvert() 
-        {
-            double tmp = Math.Round(num, acc);
-            value = Converter.Convert(tmp, p, acc, Delim);
-        }
 
-        // Представление числа в системе счисления P
-        private string value;
         public string Value
         {
-            get { return value; }
-            set { this.value = value; }
+            get { return Converter.Convert(num, p, acc, Delim); }
+            set { }
         }
 
-        public char Delim { get; set; }
 
+        public static char Delim { get; set; }
 
-
-        // Система счисления
         private int p;
-        public int P
+
+        public  int P
         {
             get { return p; }
             set
             {
                 if (value < 2 || value > 16)
-                    throw new BaseException("P must be in [2; 16]\n");
+                    throw new BaseException("Основание должно быть в [2; 16]\n");
                 p = value;
-                Reconvert();
             }
         }
 
-        // Точность представления
         private int acc;
+
+
         public int Acc
         {
             get { return acc; }
-            set
-            {
-                acc = value;
-                Reconvert();
-            }
+            set { acc = value; }
         }
-        // Число в десятичной системе
+
         private double num;
+
         public double Num
         {
             get { return num; }
-            set
-            {
-                num = value;
-                Reconvert();
-            }
+            set { num = value; }
         }
 
-        public TPNumber() { num = 0.0; acc = 5; p = 10; Delim = ','; Reconvert();  }
+        public TPNumber() { num = 0.0; acc = 5; p = 10; Delim = ','; }
 
-        public TPNumber(string _Value, int _P, int _Accuracy) { Delim = ','; value = _Value; p = _P; acc = _Accuracy; }
+        public TPNumber(string _Value, int _P, int _Accuracy) { num = Converter.Convert(_Value, _P, Delim); p = _P; acc = _Accuracy; }
 
-        public TPNumber(double _Num, int _P, int _Acc) { num = _Num; p = _P; acc = _Acc; Delim = ','; Reconvert(); }
+        public TPNumber(double _Num, int _P, int _Accuracy) { num = _Num; p = _P; acc = _Accuracy; }
 
-        public TPNumber(TPNumber d) { value = d.Value; p = d.P; acc = d.Acc; num = d.Num; Delim = d.Delim; }
+        public TPNumber(TPNumber d) { num = d.Num; p = d.P; acc = d.Acc; }
 
 
 
         public static TPNumber operator+(TPNumber d1, TPNumber d2)
         {
-            if (d1.p != d2.p)
-                throw new BaseException("Different bases in operator+\n");
-            return new TPNumber(d1.num + d2.num, d1.p, d1.acc);
+            if (d1.P != d2.P)
+                throw new BaseException("Разные основания в operator+\n");
+            double res = d1.Num + d2.Num;
+            if (double.IsInfinity(res))
+                throw new OverflowException();
+            return checked(new TPNumber(res, d1.P, d1.Acc));
         }
 
         public static TPNumber operator*(TPNumber d1, TPNumber d2)
         {
-            if (d1.p != d2.p)
-                throw new BaseException("Different bases in operator*\n");
-            double res;
-            try
-            {
-                checked { res = d1.num * d2.num; }
-            }
-            catch (Exception e) { Console.WriteLine("Overflow!");  throw e; }
-            return new TPNumber(res, d1.p, d1.acc);
+            if (d1.P != d2.P)
+                throw new BaseException("Разные основания в operator*\n");
+            double res = d1.Num * d2.Num;
+            if (double.IsInfinity(res))
+                throw new OverflowException();
+            return checked(new TPNumber(res, d1.P, d1.Acc));
         }
 
         public static TPNumber operator-(TPNumber d1, TPNumber d2)
         {
-            if (d1.p != d2.p)
-                throw new BaseException("Different bases in operator-\n");
-            return new TPNumber(d1.num - d2.num, d1.p, d1.acc);
+            if (d1.P != d2.P)
+                throw new BaseException("Разные основания в operator-\n");
+            double res = d1.Num - d2.Num;
+            if (double.IsInfinity(res))
+                throw new OverflowException();
+            return checked(new TPNumber(res, d1.P, d1.Acc));
         }
 
         public static TPNumber operator/(TPNumber d1, TPNumber d2)
         {
-            if (d1.p != d2.p)
-                throw new BaseException("Different bases in operator/\n");
-            if (d2.num == 0)
+            if (d1.P != d2.P)
+                throw new BaseException("Разные основания в operator/\n");
+            if (d2.Num == 0)
                 throw new ArithmeticException("Ошибка: деление на ноль\n");
-            return new TPNumber(d1.num / d2.num, d1.p, d1.acc);
+            double res = d1.Num / d2.Num;
+            if (double.IsInfinity(res))
+                throw new OverflowException();
+            return checked(new TPNumber(res, d1.P, d1.Acc));
         }
 
         public TPNumber Inverse()
         {
             if (num == 0)
                 throw new ArithmeticException("Ошибка: ноль необратим\n");
-            return new TPNumber(1 / num, p, acc);
+            double res = 1 / num;
+            if (double.IsInfinity(res))
+                throw new OverflowException();
+            return checked(new TPNumber(res, p, acc));
         }
 
         public TPNumber Sqare()
         {
-            return new TPNumber(num * num, p, acc);
+            double res = num * num;
+            if (double.IsInfinity(res))
+                throw new OverflowException();
+            return new TPNumber(res, p, acc);
         }
 
         public string StrP()
@@ -152,7 +148,6 @@ namespace PO2
         public void SetNumStr(string _Num, char delim = ',')
         {
             num = Converter.Convert(_Num, p, delim);
-            Reconvert();
         }
     }
 }
