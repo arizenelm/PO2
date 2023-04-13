@@ -98,7 +98,7 @@ namespace PO2
                 if (Memory.FState)
                 {
                     if (State == States.l_val)
-                        Memory.FNumber = Processor.Lop_Res;
+                        Memory.FNumber = (T)Processor.Lop_Res.Clone();
                 }
                 return Editor.Str;
             }
@@ -214,7 +214,7 @@ namespace PO2
                     }
                     if (!floatMode)
                         Processor.Lop_Res.Num = checked((long)Processor.Lop_Res.Num);
-                    Editor.Str = Processor.Lop_Res.Value;
+                    Editor.Str = Processor.Lop_Res.ValueStr;
                     State = States.l_val;
                     return Editor.Str;
                 }
@@ -275,12 +275,12 @@ namespace PO2
                 int new_p = i - 30;
                 Processor.Lop_Res.P = new_p;
                 Processor.Rop.P = new_p;
-                Editor.Str = Processor.Lop_Res.Value;
+                Editor.Str = Processor.Lop_Res.ValueStr;
                 if (State != States.l_val)
                 {
                     Editor.Str += (char)Processor.Operation;
                     if (State == States.r_val)
-                        Editor.Str += Processor.Rop.Value;
+                        Editor.Str += Processor.Rop.ValueStr;
                 }
                 if (Memory.FState)
                 {
@@ -296,7 +296,7 @@ namespace PO2
                 if (State == States.l_val)
                 {
                     Processor.Lop_Res.Num = (int)Processor.Lop_Res.Num;
-                    Editor.Str = Processor.Lop_Res.Value;
+                    Editor.Str = Processor.Lop_Res.ValueStr;
                 }                
                 return Editor.Str;
             }
@@ -314,12 +314,12 @@ namespace PO2
                 int new_acc = i - 47;
                 Processor.Lop_Res.Acc = new_acc;
                 Processor.Rop.Acc = new_acc;
-                Editor.Str = Processor.Lop_Res.Value;
+                Editor.Str = Processor.Lop_Res.ValueStr;
                 if (State != States.l_val)
                 {
                     Editor.Str += (char)Processor.Operation;
                     if (State == States.r_val)
-                        Editor.Str += Processor.Rop.Value;
+                        Editor.Str += Processor.Rop.ValueStr;
                 }
                 if (Memory.FState)
                 {

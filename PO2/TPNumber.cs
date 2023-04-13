@@ -11,7 +11,7 @@ namespace PO2
     public class TPNumber : TANumber
     {
 
-        public override string Value
+        public override string ValueStr
         {
             get { return Converter.Convert(num, p, acc, Delim); }
             set { }
@@ -55,7 +55,17 @@ namespace PO2
 
         public TPNumber(double _Num, int _P, int _Accuracy) { num = _Num; p = _P; acc = _Accuracy; }
 
-        public TPNumber(TPNumber d) { num = d.Num; p = d.P; acc = d.Acc; }
+        public TPNumber(TPNumber d) 
+        {
+            Num = d.Num;
+            P = d.P;
+            Acc = d.Acc;
+        }
+
+        public override object Clone()
+        {
+            return new TPNumber(Num, P, Acc);
+        }
 
 
         protected override TANumber NeutralMul()

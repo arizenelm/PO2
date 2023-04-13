@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace PO2
 {
     
-    public class TMemory<T> where T : TPNumber, new()
+    public class TMemory<T> where T : TANumber, new()
     {
         public TMemory() { fNumber = new T(); }
         private T fNumber;
@@ -19,7 +19,6 @@ namespace PO2
             }
             set
             {
-                //FNumber = Activator.CreateInstance(typeof(T), new object[] { value }) as T;
                 fNumber = value;
                 FState = true;
             }
@@ -40,7 +39,7 @@ namespace PO2
         }
 
 
-        public string GetStr() { return fNumber.Value;  }
+        public string GetStr() { return fNumber.ValueStr;  }
 
         public double GetNum() { return fNumber.Num; }
 

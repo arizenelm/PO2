@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PO2
 {
-    public abstract class TANumber
+    public abstract class TANumber : ICloneable
     {
-        public abstract string Value { get; set; }
+        public abstract string ValueStr { get; set; }
 
         public static char Delim { get; set; }
 
@@ -27,6 +27,8 @@ namespace PO2
         protected abstract TANumber Multiply(TANumber d);
 
         protected abstract TANumber Divide(TANumber d);
+
+        public abstract object Clone();
 
 
         public static TANumber operator +(TANumber d1, TANumber d2) { return d1.Add(d2); }
