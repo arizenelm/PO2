@@ -8,21 +8,20 @@ namespace PO2
 {
 
 
-    public class TPNumber
+    public class TPNumber : TANumber
     {
 
-        public string Value
+        public override string Value
         {
             get { return Converter.Convert(num, p, acc, Delim); }
             set { }
         }
 
 
-        public static char Delim { get; set; }
 
         private int p;
 
-        public  int P
+        public override int P
         {
             get { return p; }
             set
@@ -36,7 +35,7 @@ namespace PO2
         private int acc;
 
 
-        public int Acc
+        public override int Acc
         {
             get { return acc; }
             set { acc = value; }
@@ -44,7 +43,7 @@ namespace PO2
 
         private double num;
 
-        public double Num
+        public override double Num
         {
             get { return num; }
             set { num = value; }
@@ -59,65 +58,53 @@ namespace PO2
         public TPNumber(TPNumber d) { num = d.Num; p = d.P; acc = d.Acc; }
 
 
-
-        public static TPNumber operator+(TPNumber d1, TPNumber d2)
+        protected override TANumber NeutralMul()
         {
-            if (d1.P != d2.P)
+            return new TPNumber(1, P, Acc);
+        }
+
+        protected override TANumber Add(TANumber d)
+        {
+            if (P != d.P)
                 throw new BaseException("Разные основания в operator+\n");
-            double res = d1.Num + d2.Num;
+            double res = Num + d.Num;
             if (double.IsInfinity(res))
                 throw new OverflowException();
-            return checked(new TPNumber(res, d1.P, d1.Acc));
+            return new TPNumber(res, P, Acc);
         }
 
-        public static TPNumber operator*(TPNumber d1, TPNumber d2)
+        protected override TANumber Substract(TANumber d)
         {
-            if (d1.P != d2.P)
-                throw new BaseException("Разные основания в operator*\n");
-            double res = d1.Num * d2.Num;
-            if (double.IsInfinity(res))
-                throw new OverflowException();
-            return checked(new TPNumber(res, d1.P, d1.Acc));
-        }
-
-        public static TPNumber operator-(TPNumber d1, TPNumber d2)
-        {
-            if (d1.P != d2.P)
+            if (P != d.P)
                 throw new BaseException("Разные основания в operator-\n");
-            double res = d1.Num - d2.Num;
+            double res = Num - d.Num;
             if (double.IsInfinity(res))
                 throw new OverflowException();
-            return checked(new TPNumber(res, d1.P, d1.Acc));
+            return new TPNumber(res, P, Acc);
         }
 
-        public static TPNumber operator/(TPNumber d1, TPNumber d2)
+        protected override TANumber Multiply(TANumber d)
         {
-            if (d1.P != d2.P)
+            if (P != d.P)
+                throw new BaseException("Разные основания в operator*\n");
+            double res = Num * d.Num;
+            if (double.IsInfinity(res))
+                throw new OverflowException();
+            return new TPNumber(res, P, Acc);
+        }
+
+
+
+        protected override TANumber Divide(TANumber d)
+        {
+            if (P != d.P)
                 throw new BaseException("Разные основания в operator/\n");
-            if (d2.Num == 0)
+            if (d.Num == 0)
                 throw new ArithmeticException("Ошибка: деление на ноль\n");
-            double res = d1.Num / d2.Num;
+            double res = Num / d.Num;
             if (double.IsInfinity(res))
                 throw new OverflowException();
-            return checked(new TPNumber(res, d1.P, d1.Acc));
-        }
-
-        public TPNumber Inverse()
-        {
-            if (num == 0)
-                throw new ArithmeticException("Ошибка: ноль необратим\n");
-            double res = 1 / num;
-            if (double.IsInfinity(res))
-                throw new OverflowException();
-            return checked(new TPNumber(res, p, acc));
-        }
-
-        public TPNumber Sqare()
-        {
-            double res = num * num;
-            if (double.IsInfinity(res))
-                throw new OverflowException();
-            return new TPNumber(res, p, acc);
+            return new TPNumber(res, P, Acc);
         }
 
         public string StrP()

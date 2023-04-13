@@ -59,6 +59,7 @@
     <Compile Include="Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
+    <Compile Include="TANumber.cs" />
     <Compile Include="TCtrl.cs" />
     <Compile Include="TProc.cs" />
     <Compile Include="TMemory.cs" />
