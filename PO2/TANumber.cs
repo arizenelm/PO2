@@ -45,6 +45,8 @@ namespace PO2
         /// <returns></returns>
         protected abstract TANumber NeutralMul();
 
+        public abstract void SetNumStr(string _Num, char delim = ',');
+
         public virtual TANumber Sqare()
         {
             return Multiply(this);

@@ -142,7 +142,7 @@ namespace PO2
             p = Convert.ToInt32(_P);
         }
 
-        public void SetNumStr(string _Num, char delim = ',')
+        public override void SetNumStr(string _Num, char delim = ',')
         {
             num = Converter.Convert(_Num, p, delim);
         }

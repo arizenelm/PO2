@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PO2
 {
-    public class TCtrl<T> where T : TPNumber, new()
+    public class TCtrl<T> where T : TANumber, new()
     {
         public enum States { l_val = 0, op, r_val, func }
 
@@ -21,6 +21,9 @@ namespace PO2
         public TMemory<T> Memory { get; set; }
 
         States State { get; set; }
+
+        int P = 10;
+        int Acc = 5;
 
         T Number { get; set; }
 
@@ -162,12 +165,21 @@ namespace PO2
                     {
                         State = States.op;
                         Processor.Rop = new T();
+                        Processor.Rop.Acc = Acc;
+                        Processor.Rop.P = P;
                     }
                 }
                 else if (old_state == States.op)
                     Processor.ResetOp();
                 else
+                {
                     Processor.Clear();
+                    Processor.Lop_Res.P = P;
+                    Processor.Rop.P = P;
+                    Processor.Lop_Res.Acc = Acc;
+                    Processor.Rop.Acc = Acc;
+                }
+                    
 
                 return Editor.Str;
             }
@@ -272,9 +284,9 @@ namespace PO2
             // Изменение основания системы счисления
             if (32 <= i && i <= 46)
             {
-                int new_p = i - 30;
-                Processor.Lop_Res.P = new_p;
-                Processor.Rop.P = new_p;
+                P = i - 30;
+                Processor.Lop_Res.P = P;
+                Processor.Rop.P = P;
                 Editor.Str = Processor.Lop_Res.ValueStr;
                 if (State != States.l_val)
                 {
@@ -284,7 +296,7 @@ namespace PO2
                 }
                 if (Memory.FState)
                 {
-                    Memory.FNumber.P = new_p;
+                    Memory.FNumber.P = P;
                 }
                 return Editor.Str;
             }
@@ -311,9 +323,9 @@ namespace PO2
             // Изменение точности
             if (49 <= i && i <= 56)
             {
-                int new_acc = i - 47;
-                Processor.Lop_Res.Acc = new_acc;
-                Processor.Rop.Acc = new_acc;
+                Acc = i - 47;
+                Processor.Lop_Res.Acc = Acc;
+                Processor.Rop.Acc = Acc;
                 Editor.Str = Processor.Lop_Res.ValueStr;
                 if (State != States.l_val)
                 {
@@ -323,7 +335,7 @@ namespace PO2
                 }
                 if (Memory.FState)
                 {
-                    Memory.FNumber.Acc = new_acc;
+                    Memory.FNumber.Acc = Acc;
                 }
                 return Editor.Str;
             }
